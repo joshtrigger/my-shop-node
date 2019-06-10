@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Product = require('../models/product');
 const mongoose = require('mongoose');
+const auth = require('../middleware/authenticate');
 
 router.get('/', (req, res, next) => {
     Product.find()
@@ -19,7 +20,7 @@ router.get('/', (req, res, next) => {
         })
 });
 
-router.post('/', (req, res, next) => {
+router.post('/', auth, (req, res, next) => {
     const product = new Product({
         _id: new mongoose.Types.ObjectId(),
         name: req.body.name,
@@ -38,7 +39,7 @@ router.post('/', (req, res, next) => {
         })
 });
 
-router.delete('/:productId', (req, res, next) => {
+router.delete('/:productId', auth, (req, res, next) => {
     const id = req.params.productId;
     Product.remove({_id: id})
         .exec()
@@ -47,12 +48,12 @@ router.delete('/:productId', (req, res, next) => {
                 message: `product of id ${id} has been deleted`
             })
         })
-        .catch(err=>{
-            res.status(500).json({error:err})
+        .catch(err => {
+            res.status(500).json({error: err})
         });
-})
+});
 
-router.put('/:productId', (req, res, next) => {
+router.put('/:productId', auth, (req, res, next) => {
     const id = req.params.productId;
     Product.update({_id: id}, {$set: req.body})
         .exec()
