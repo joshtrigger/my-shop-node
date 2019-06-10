@@ -3,12 +3,13 @@ const router = express.Router();
 const Order = require('../models/order');
 const Product = require('../models/product');
 const mongoose = require('mongoose');
+const auth = require('../middleware/authenticate');
 
-router.get('/', (req, res, next) => {
+router.get('/', auth, (req, res, next) => {
     Order.find()
         .exec()
         .then(result => {
-            if (result.length == 0) {
+            if (result.length === 0) {
                 res.status(200).json({
                     message: 'No orders available'
                 })
@@ -21,7 +22,7 @@ router.get('/', (req, res, next) => {
         })
 });
 
-router.post('/', (req, res, next) => {
+router.post('/', auth, (req, res, next) => {
     const order = new Order({
         _id: new mongoose.Types.ObjectId(),
         product: req.body.productId,
@@ -55,7 +56,7 @@ router.post('/', (req, res, next) => {
 
 });
 
-router.get('/:orderId', (req, res, next) => {
+router.get('/:orderId', auth, (req, res, next) => {
     const id = req.params.orderId
     Order.findById({_id: id}).exec()
         .then(result => {
@@ -68,7 +69,7 @@ router.get('/:orderId', (req, res, next) => {
         })
 });
 
-router.delete('/:orderId', (req, res, next) => {
+router.delete('/:orderId', auth, (req, res, next) => {
     const id = req.params.orderId;
     Order.remove({_id: id}).exec()
         .then(() => {

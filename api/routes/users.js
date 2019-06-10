@@ -45,7 +45,7 @@ router.post('/login', (req, res, next) => {
             bcrypt.compare(req.body.password, user.password, (err, response) => {
                 if (response) {
                     const payload = {userId: user._id, email: req.body.email};
-                    const token = jwt.sign(payload, process.env.TERM, {expiresIn: '1h'});
+                    const token = jwt.sign(payload, 'secret', {expiresIn: '1h'});
                     res.status(200).json({
                         message: 'you have logged in successfully',
                         token: token
