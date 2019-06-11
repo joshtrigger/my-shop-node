@@ -3,6 +3,9 @@ const morgan = require('morgan');
 const app = express();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({
@@ -14,7 +17,7 @@ const productsRoutes = require('./api/routes/products');
 const ordersRoutes = require('./api/routes/orders');
 const userRoutes = require('./api/routes/users');
 
-mongoose.connect('mongodb://localhost:27017/my-shop', {useNewUrlParser: true});
+mongoose.connect(process.env.DB_INFO, {useNewUrlParser: true});
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
