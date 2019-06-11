@@ -43,7 +43,7 @@ router.delete('/:productId', auth, (req, res, next) => {
     const id = req.params.productId;
     Product.remove({_id: id})
         .exec()
-        .then(result => {
+        .then(() => {
             res.status(200).json({
                 message: `product of id ${id} has been deleted`
             })
@@ -57,7 +57,7 @@ router.put('/:productId', auth, (req, res, next) => {
     const id = req.params.productId;
     Product.update({_id: id}, {$set: req.body})
         .exec()
-        .then(result => {
+        .then(() => {
             res.status(200).json({
                 message: 'product has been successfully updated',
             })
