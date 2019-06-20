@@ -40,6 +40,11 @@ router.post('/signup', (req, res, next) => {
 });
 
 router.post('/login', (req, res, next) => {
+    if (req.body.password === '' || req.body.password === null) {
+        return res.status(400).json({
+            error: {message: 'password field cannot be blank'}
+        })
+    }
     User.findOne({email: req.body.email}).exec()
         .then(user => {
             bcrypt.compare(req.body.password, user.password, (err, response) => {
