@@ -23,7 +23,7 @@ router.get('/facebook/callback', passport.authenticate('facebook'), (req, res, n
 router.get('/facebook', passport.authenticate('facebook', {scope: ['email']}));
 
 router.get('/twitter/callback', passport.authenticate('twitter'), (req, res, next) => {
-    // generateToken(req.user, res)
+    generateToken(req.user, res)
 });
 
 router.get('/twitter', passport.authenticate('twitter'));

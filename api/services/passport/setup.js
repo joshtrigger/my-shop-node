@@ -20,19 +20,7 @@ passport.use(new GoogleStrategy({
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: 'http://localhost:3000/auth/google/callback'
 }, (accessToken, refreshToken, profile, done) => {
-    const googleData = profile._json;
-    const conditions = {email: googleData.email, username: googleData.name, _id: new mongoose.Types.ObjectId()};
-    User.findOne({email: googleData.email}, (err, user) => {
-        if (err || !user) {
-            newUser = new User(conditions);
-            newUser.save()
-                .then(result => done(null, result))
-                .catch(err => console.log(err))
-        }
-        if (user) {
-            done(null, user);
-        }
-    })
+    addUser(profile, done)
 }));
 
 passport.use(new FacebookStrategy({
@@ -41,9 +29,27 @@ passport.use(new FacebookStrategy({
     callbackURL: 'http://localhost:3000/auth/facebook/callback',
     profileFields: ['id', 'displayName', 'emails']
 }, (accessToken, refreshToken, profile, done) => {
-    const facebookData = profile._json;
-    const conditions = {email: facebookData.email, username: facebookData.name, _id: new mongoose.Types.ObjectId()};
-    User.findOne({email: facebookData.email}, (err, user) => {
+    addUser(profile, done)
+}));
+
+passport.use(new TwitterStrategy({
+    consumerKey: process.env.TWITTER_API_KEY,
+    consumerSecret: process.env.TWITTER_SECRET_KEY,
+    callbackURL: 'http://127.0.0.1:3000/auth/twitter/callback'
+}, (token, tokenSecret, profile, done) => {
+    addUser(profile, done)
+}));
+
+function addUser(userData, done) {
+    const userData = profile._json;
+    const conditions = {
+        email: userData.email,
+        username: userData.name,
+        _id: new mongoose.Types.ObjectId()
+    };
+    User.findOne({
+        email: userData.email
+    }, (err, user) => {
         if (err || !user) {
             newUser = new User(conditions);
             newUser.save()
@@ -54,26 +60,4 @@ passport.use(new FacebookStrategy({
             done(null, user);
         }
     })
-}));
-
-passport.use(new TwitterStrategy({
-    consumerKey: process.env.TWITTER_API_KEY,
-    consumerSecret: process.env.TWITTER_SECRET_KEY,
-    callbackURL: 'http://127.0.0.1:3000/auth/twitter/callback'
-}, (token, tokenSecret, profile, done) => {
-    const twitterData = profile._json;
-    console.log(twitterData);
-    // const conditions = {email: facebookData.email, username: facebookData.name, _id: new mongoose.Types.ObjectId()};
-    // User.findOne({email: facebookData.email}, (err, user) => {
-    //     if (err || !user) {
-    //         newUser = new User(conditions);
-    //         newUser.save()
-    //             .then(result => done(null, result))
-    //             .catch(err => console.log(err))
-    //     }
-    //     if (user) {
-    //         done(null, user);
-    //     }
-    // })
-}));
-
+}
