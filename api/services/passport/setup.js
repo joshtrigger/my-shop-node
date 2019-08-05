@@ -18,7 +18,7 @@ passport.deserializeUser((id, done) => {
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENTID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: 'http://localhost:3000/auth/google/callback'
+    callbackURL: `${process.env.BASE_URL}/auth/google/callback`
 }, (accessToken, refreshToken, profile, done) => {
     addUser(profile, done)
 }));
@@ -26,7 +26,7 @@ passport.use(new GoogleStrategy({
 passport.use(new FacebookStrategy({
     clientID: process.env.FB_APPID,
     clientSecret: process.env.FB_APP_SECRET,
-    callbackURL: 'http://localhost:3000/auth/facebook/callback',
+    callbackURL: `${process.env.BASE_URL}/auth/facebook/callback`,
     profileFields: ['id', 'displayName', 'emails']
 }, (accessToken, refreshToken, profile, done) => {
     addUser(profile, done)
@@ -35,7 +35,7 @@ passport.use(new FacebookStrategy({
 passport.use(new TwitterStrategy({
     consumerKey: process.env.TWITTER_API_KEY,
     consumerSecret: process.env.TWITTER_SECRET_KEY,
-    callbackURL: 'http://127.0.0.1:3000/auth/twitter/callback'
+    callbackURL: `${process.env.BASE_URL}/auth/twitter/callback`
 }, (token, tokenSecret, profile, done) => {
     addUser(profile, done)
 }));
