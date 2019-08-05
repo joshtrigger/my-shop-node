@@ -28,9 +28,15 @@ const ordersRoutes = require('./api/routes/orders');
 const userRoutes = require('./api/routes/users');
 const authRoutes = require('./api/routes/oauth');
 
-mongoose.connect(process.env.DB_INFO, {useNewUrlParser: true})
-    .then(()=>{console.log('connect to database')})
-    .catch(err=>{console.log('error when connecting to database', err)});
+mongoose.connect(process.env.DB_URL, {
+        useNewUrlParser: true
+    })
+    .then(() => {
+        console.log('connected to database')
+    })
+    .catch(err => {
+        console.log('error when connecting to database', err)
+    });
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
