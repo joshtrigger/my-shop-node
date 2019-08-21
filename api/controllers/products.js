@@ -1,5 +1,7 @@
 const Product = require('../models/product');
 const mongoose = require('mongoose');
+const cloudinary = require('../cloudinary');
+const fs = require('fs');
 
 const getProducts = (req, res, next) => {
     Product.find()
@@ -20,26 +22,35 @@ const getProducts = (req, res, next) => {
 }
 
 const addNewProduct = (req, res, next) => {
-    console.log(req.file)
-    const product = new Product({
-        _id: new mongoose.Types.ObjectId(),
-        name: req.body.name,
-        price: req.body.price,
-        creationDate: Date.now(),
-        category: req.body.category
-    });
+    const path = req.file.path;
 
-    product.save()
-        .then(() => {
-            res.status(201).json({
-                message: 'product has been created successfully'
-            })
+    cloudinary.uploads(path)
+        .then(response => {
+            const product = new Product({
+                _id: new mongoose.Types.ObjectId(),
+                name: req.body.name,
+                price: req.body.price,
+                creationDate: Date.now(),
+                category: req.body.category,
+                description: req.body.description,
+                imagePath: response.url,
+                cloudinaryId: response.id
+            });
+
+            product.save()
+                .then(() => {
+                    res.status(201).json({
+                        message: 'product has been created successfully'
+                    })
+                    fs.unlinkSync(path)
+                })
+                .catch(err => {
+                    res.status(500).json({
+                        error: err
+                    })
+                })
         })
-        .catch(err => {
-            res.status(500).json({
-                error: err
-            })
-        })
+        .catch(err=>{console.log(err)})
 }
 
 const deleteProduct = (req, res, next) => {

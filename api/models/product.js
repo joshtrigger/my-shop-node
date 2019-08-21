@@ -11,7 +11,11 @@ const productSchema = mongoose.Schema({
     },
     creationDate: Date,
     imagePath: String,
-    description: String,
+    cloudinaryId: String,
+    description: {
+        type: String,
+        required: true
+    },
     category: {
         type: String,
         required: true
