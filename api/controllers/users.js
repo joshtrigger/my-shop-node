@@ -106,14 +106,14 @@ const passwordResetRequest = (req, res, next) => {
           to: `${result.email}`,
           subject: 'Password Reset',
           html: `
-                    <h2>My Shop</h2>
+                    <h2>My Shop Password reset request</h2>
                     <p>
                         Hello ${result.username},<br>
                         
                         A password reset has been requested, please click on the link below to<br>
                         to reset your password then try logging in. Link expires after an hour<br>
                         
-                        <a href="'${url}'">Click here</a><br>
+                        <a href=${url}>Click here</a><br>
                     </p>
                 `
         };
