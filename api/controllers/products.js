@@ -20,11 +20,13 @@ const getProducts = (req, res, next) => {
 }
 
 const addNewProduct = (req, res, next) => {
+    console.log(req.file)
     const product = new Product({
         _id: new mongoose.Types.ObjectId(),
         name: req.body.name,
         price: req.body.price,
-        creationDate: Date.now()
+        creationDate: Date.now(),
+        category: req.body.category
     });
 
     product.save()

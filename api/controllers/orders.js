@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 
 const getAllOrders = (req, res, next) => {
     Order.find()
+        .populate('product')
         .exec()
         .then(result => {
             if (result.length === 0) {
@@ -65,10 +66,16 @@ const getSpecificOrder = (req, res, next) => {
     const id = req.params.orderId
     Order.findById({
             _id: id
-        }).exec()
+        })
+        .populate('product')
+        .exec()
         .then(result => {
             if (result) {
                 res.status(200).json(result)
+            }else{
+                res.status(404).json({
+                    message:'order does not exist'
+                })
             }
         })
         .catch(err => {
