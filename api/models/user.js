@@ -22,10 +22,20 @@ const userSchema = mongoose.Schema({
         type: String,
         required: false
     },
-    profilePicUrl: {
-        type: String,
-        required: false
-    }
+    pictures:{
+        profilePic: String,
+        coverPhoto: String
+    },
+    isActive: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+    isAdmin: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
 });
 
 userSchema.plugin(findOrCreate);

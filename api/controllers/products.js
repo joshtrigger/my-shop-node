@@ -2,6 +2,7 @@ const Product = require('../models/product');
 const mongoose = require('mongoose');
 const cloudinary = require('../cloudinary');
 const fs = require('fs');
+const jwt = require('jsonwebtoken');
 
 const getProducts = (req, res, next) => {
     Product.find()
@@ -23,7 +24,9 @@ const getProducts = (req, res, next) => {
 
 const addNewProduct = (req, res, next) => {
     const path = req.file.path;
-
+    const token = req.headers.authorization.split(' ')[1]
+    const userData = jwt.verify(token, process.env.SECRETKEY);
+    const user = {'username':userData.username, 'userId':userData.userId}
     cloudinary.uploads(path)
         .then(response => {
             const product = new Product({
@@ -34,7 +37,8 @@ const addNewProduct = (req, res, next) => {
                 category: req.body.category,
                 description: req.body.description,
                 imagePath: response.url,
-                cloudinaryId: response.id
+                cloudinaryId: response.id,
+                postedBy: user
             });
 
             product.save()
@@ -94,6 +98,7 @@ const updateProduct = (req, res, next) => {
 const getSpecificProduct = (req, res, next) => {
     const id = req.params.productId
     Product.findById(id).exec()
+        .populate('postedBy')
         .then(result => {
             if (result) {
                 res.status(200).json(result)
