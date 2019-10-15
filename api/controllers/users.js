@@ -86,7 +86,7 @@ const login = (req, res, next) => {
         })
         .catch(err => {
             res.status(500).json({
-                error: 'User does not exist'
+                error: 'User with this email does not exist'
             });
         });
 };

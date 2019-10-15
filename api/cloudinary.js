@@ -6,7 +6,7 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET
 })
 
-exports.uploads = (file) => {
+exports.uploads = (file, folder) => {
     return new Promise(resolve => {
         cloudinary.uploader.upload(file, (result) => {
             resolve({
@@ -14,7 +14,8 @@ exports.uploads = (file) => {
                 id: result.public_id
             })
         }, {
-            resource_type: "auto"
+            resource_type: "auto",
+            folder: folder
         })
     })
 }

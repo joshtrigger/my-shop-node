@@ -18,13 +18,9 @@ const userSchema = mongoose.Schema({
         required: false,
         default: null
     },
-    phoneNumber: {
-        type: String,
-        required: false
-    },
-    pictures:{
-        profilePic: String,
-        coverPhoto: String
+    dateOfRegistration: {
+        type: Number,
+        default: Date.now()
     },
     isActive: {
         type: Boolean,

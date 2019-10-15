@@ -27,7 +27,7 @@ const addNewProduct = (req, res, next) => {
     const token = req.headers.authorization.split(' ')[1]
     const userData = jwt.verify(token, process.env.SECRETKEY);
     const user = {'username':userData.username, 'userId':userData.userId}
-    cloudinary.uploads(path)
+    cloudinary.uploads(path, 'Products')
         .then(response => {
             const product = new Product({
                 _id: new mongoose.Types.ObjectId(),
