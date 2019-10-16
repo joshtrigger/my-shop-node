@@ -72,9 +72,9 @@ const getSpecificOrder = (req, res, next) => {
         .then(result => {
             if (result) {
                 res.status(200).json(result)
-            }else{
+            } else {
                 res.status(404).json({
-                    message:'order does not exist'
+                    message: 'order does not exist'
                 })
             }
         })
