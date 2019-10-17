@@ -3,11 +3,17 @@ const UserProfile = require('../models/profile')
 const User = require('../models/user')
 const jwt = require('jsonwebtoken');
 const cloudinary = require('../cloudinary')
-const fs=require('fs')
+const fs = require('fs')
 
 const uploader = async (path) => await cloudinary.uploads(path, 'Profiles')
 
-const createProfile = async (req, res, next) => {
+function getUserData(headers) {
+  const token = headers.split(' ')[1]
+  const decoded = jwt.verify(token, process.env.SECRETKEY)
+  return decoded;
+}
+const createProfile = async (req, res) => {
+  const token = getUserData(req.headers.authorization)
   const urls = []
   const paths = [req.files.profilePic[0].path, req.files.coverPhoto[0].path];
   for (const path of paths) {
@@ -15,8 +21,6 @@ const createProfile = async (req, res, next) => {
     urls.push(f)
     fs.unlinkSync(path)
   }
-  const jwttoken = req.headers.authorization.split(' ');
-  const token = jwt.verify(jwttoken[1], process.env.SECRETKEY)
 
   const profile = new UserProfile({
     _id: new mongoose.Types.ObjectId(),
@@ -61,10 +65,10 @@ const createProfile = async (req, res, next) => {
 
 }
 
-const getProfile = (req, res, next) => {
-  const id = req.params.id
-  UserProfile.findById({
-      _id: id
+const getProfile = (req, res) => {
+  const userEmail = getUserData(req.headers.authorization).email
+  UserProfile.findOne({
+      email: userEmail
     })
     .populate('login')
     .exec()
@@ -80,8 +84,14 @@ const getProfile = (req, res, next) => {
     })
 }
 
-const updateProfile = (req, res, next) => {
+const updateProfile = (req, res) => {
+  const userEmail=getUserData(req.headers.authorization).email;
 
+  // UserProfile.findOneAndUpdate({email: userEmail}, req.body)
+  res.status(200).json({
+    message: 'You have successfully updated your profile',
+    body: req.body
+  })
 }
 
 module.exports = {

@@ -16,8 +16,8 @@ const fields = [{
 
 router.post('/user', auth, upload.fields(fields), profileController.createProfile);
 
-router.get('/:id/user', auth, profileController.getProfile)
+router.get('/user', auth, profileController.getProfile)
 
-router.put('/:id/user', auth, profileController.updateProfile)
+router.put('/user', auth, profileController.updateProfile)
 
 module.exports = router;
