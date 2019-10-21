@@ -105,10 +105,9 @@ const updateProfile = (req, res) => {
   UserProfile.findOneAndUpdate({
       email: userEmail
     }, newData)
-    .then(result => {
+    .then(() => {
       res.status(200).json({
-        message: "Successfully updated profile",
-        result: result
+        message: "Successfully updated profile"
       })
     })
     .catch(err => {
