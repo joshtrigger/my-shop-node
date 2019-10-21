@@ -85,13 +85,37 @@ const getProfile = (req, res) => {
 }
 
 const updateProfile = (req, res) => {
-  const userEmail=getUserData(req.headers.authorization).email;
+  const userEmail = getUserData(req.headers.authorization).email;
+  const newData = {
+    name: {
+      first: req.body.firstName,
+      middle: req.body.middleName,
+      last: req.body.lastName
+    },
+    location: {
+      country: req.body.country,
+      city: req.body.city,
+      address: req.body.address,
+      town: req.body.town
+    },
+    gender: req.body.gender,
+    phone: req.body.phone
+  }
 
-  // UserProfile.findOneAndUpdate({email: userEmail}, req.body)
-  res.status(200).json({
-    message: 'You have successfully updated your profile',
-    body: req.body
-  })
+  UserProfile.findOneAndUpdate({
+      email: userEmail
+    }, newData)
+    .then(result => {
+      res.status(200).json({
+        message: "Successfully updated profile",
+        result: result
+      })
+    })
+    .catch(err => {
+      res.status(500).json({
+        error: err
+      })
+    })
 }
 
 module.exports = {
