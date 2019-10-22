@@ -86,21 +86,7 @@ const getProfile = (req, res) => {
 
 const updateProfile = (req, res) => {
   const userEmail = getUserData(req.headers.authorization).email;
-  const newData = {
-    name: {
-      first: req.body.firstName,
-      middle: req.body.middleName,
-      last: req.body.lastName
-    },
-    location: {
-      country: req.body.country,
-      city: req.body.city,
-      address: req.body.address,
-      town: req.body.town
-    },
-    gender: req.body.gender,
-    phone: req.body.phone
-  }
+  const {userId, ...newData} = req.body;
 
   UserProfile.findOneAndUpdate({
       email: userEmail
