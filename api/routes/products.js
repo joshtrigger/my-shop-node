@@ -14,4 +14,6 @@ router.put('/:productId', auth, productsController.updateProduct);
 
 router.get('/:productId', productsController.getSpecificProduct);
 
+router.get('/user/products', auth, productsController.getUsersProducts)
+
 module.exports = router;

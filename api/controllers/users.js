@@ -50,7 +50,7 @@ const signup = (req, res) => {
     });
 };
 
-const login = (req, res, next) => {
+const login = (req, res) => {
     if (req.body.password === '' || req.body.password === null) {
         return res.status(400).json({
             error: {
@@ -84,14 +84,14 @@ const login = (req, res, next) => {
                 }
             });
         })
-        .catch(err => {
+        .catch(() => {
             res.status(500).json({
                 error: 'User with this email does not exist'
             });
         });
 };
 
-const passwordResetRequest = (req, res, next) => {
+const passwordResetRequest = (req, res) => {
     User.findOne({
             email: req.body.email
         })
@@ -143,7 +143,7 @@ const passwordResetRequest = (req, res, next) => {
         });
 };
 
-const resetPassword = (req, res, next) => {
+const resetPassword = (req, res) => {
     const id = jwt.verify(req.params.signature, process.env.SECRETKEY);
     const a = req.body.newPassword;
     const b = req.body.confirmPassword;
@@ -171,7 +171,8 @@ const resetPassword = (req, res, next) => {
                                     res.status(500).json(err);
                                 } else {
                                     res.status(200).json({
-                                        message: 'Password has been reset successfully'
+                                        message: 'Password has been reset successfully',
+                                        data: data
                                     });
                                 }
                             }
