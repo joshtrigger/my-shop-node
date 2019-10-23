@@ -27,6 +27,7 @@ const productsRoutes = require('./api/routes/products');
 const ordersRoutes = require('./api/routes/orders');
 const userRoutes = require('./api/routes/users');
 const authRoutes = require('./api/routes/oauth');
+const userProfileRoutes=require('./api/routes/profiles')
 
 mongoose.connect(process.env.DB_URL, {
         useNewUrlParser: true
@@ -52,6 +53,7 @@ app.use('/products', productsRoutes);
 app.use('/orders', ordersRoutes);
 app.use('/user', userRoutes);
 app.use('/auth', authRoutes);
+app.use('/profile', userProfileRoutes);
 
 app.use((req, res, next) => {
     const error = new Error('Not found');

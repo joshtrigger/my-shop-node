@@ -2,8 +2,9 @@ const Order = require('../models/order');
 const Product = require('../models/product');
 const mongoose = require('mongoose');
 
-const getAllOrders = (req, res, next) => {
+const getAllOrders = (req, res) => {
     Order.find()
+        .populate('product')
         .exec()
         .then(result => {
             if (result.length === 0) {
@@ -21,7 +22,7 @@ const getAllOrders = (req, res, next) => {
         })
 }
 
-const addNewOrder = (req, res, next) => {
+const addNewOrder = (req, res) => {
     const order = new Order({
         _id: new mongoose.Types.ObjectId(),
         product: req.body.productId,
@@ -61,14 +62,20 @@ const addNewOrder = (req, res, next) => {
 
 }
 
-const getSpecificOrder = (req, res, next) => {
+const getSpecificOrder = (req, res) => {
     const id = req.params.orderId
     Order.findById({
             _id: id
-        }).exec()
+        })
+        .populate('product')
+        .exec()
         .then(result => {
             if (result) {
                 res.status(200).json(result)
+            } else {
+                res.status(404).json({
+                    message: 'order does not exist'
+                })
             }
         })
         .catch(err => {
@@ -78,7 +85,7 @@ const getSpecificOrder = (req, res, next) => {
         })
 }
 
-const deleteOrder = (req, res, next) => {
+const deleteOrder = (req, res) => {
     const id = req.params.orderId;
     Order.remove({
             _id: id
