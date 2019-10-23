@@ -18,28 +18,27 @@ function jwtSignature(payload) {
     });
     return token;
 }
-const signup = (req, res, next) => {
+const signup = (req, res) => {
     bcrypt.hash(req.body.password, 10, (err, hash) => {
         if (err) {
             return res.status(409).json({
                 error: "User already exists"
             });
         } else {
-            user = new User({
+            const user = new User({
                 _id: new mongoose.Types.ObjectId(),
                 username: req.body.username,
                 email: req.body.email,
                 password: hash
             });
-        }
-
-        user
+            
+            user
             .save()
             .then(() => {
                 res.status(201).json({
                     message: `Welcome ${
-            req.body.username
-          }, you have been successfully registered`
+                        req.body.username
+                    }, you have been successfully registered`
                 });
             })
             .catch(err => {
@@ -47,6 +46,7 @@ const signup = (req, res, next) => {
                     error: err
                 });
             });
+        }
     });
 };
 
