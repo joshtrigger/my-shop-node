@@ -93,7 +93,7 @@ const updateProfile = (req, res) => {
     }, newData)
     .then(() => {
       res.status(200).json({
-        message: "Successfully updated profile"
+        message: `Successfully updated profile for user ${userId}`
       })
     })
     .catch(err => {

@@ -26,7 +26,10 @@ const addNewProduct = (req, res) => {
     const path = req.file.path;
     const token = req.headers.authorization.split(' ')[1]
     const userData = jwt.verify(token, process.env.SECRETKEY);
-    const user = {'username':userData.username, 'userId':userData.userId}
+    const user = {
+        'username': userData.username,
+        'userId': userData.userId
+    }
     cloudinary.uploads(path, 'Products')
         .then(response => {
             const product = new Product({
@@ -54,7 +57,9 @@ const addNewProduct = (req, res) => {
                     })
                 })
         })
-        .catch(err=>{console.log(err)})
+        .catch(err => {
+            console.log(err)
+        })
 }
 
 const deleteProduct = (req, res) => {
@@ -115,10 +120,29 @@ const getSpecificProduct = (req, res) => {
         })
 }
 
+const getUsersProducts = (req, res) => {
+    const userId = req.body.userId;
+    Product.find({
+            'postedBy.userId':userId
+        })
+        .exec()
+        .then(result => {
+            res.status(200).json({
+                data: result
+            })
+        })
+        .catch(err => {
+            res.status(500).json({
+                err: err
+            })
+        })
+}
+
 module.exports = {
     getProducts,
     getSpecificProduct,
     addNewProduct,
     deleteProduct,
-    updateProduct
+    updateProduct,
+    getUsersProducts
 }
