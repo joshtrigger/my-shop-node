@@ -1,6 +1,6 @@
+/* eslint-disable no-undef */
 const expect = require('chai').expect;
 const authenticate = require('../../api/middleware/authenticate');
-const sinon = require('sinon');
 
 describe('Authenticate()', () => {
     it('should fail on authentication attempt', () => {
