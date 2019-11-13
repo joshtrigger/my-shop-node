@@ -17,7 +17,8 @@ const userSchema = mongoose.Schema({
     password: {
         type: String,
         required: false,
-        default: null
+        default: null,
+        minlength: 6
     },
     dateOfRegistration: {
         type: Number,

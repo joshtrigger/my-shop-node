@@ -132,7 +132,7 @@ const passwordResetRequest = (req, res) => {
                 });
             } else {
                 res.status(500).json({
-                    error: ''
+                    error: 'User does not exist'
                 });
             }
         })

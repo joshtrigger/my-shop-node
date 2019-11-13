@@ -22,6 +22,6 @@ describe('Authenticate()', () => {
         expect(res.status).to.be.equal(401);
     })
     it('should authenticate successfully', () => {
-        // authenticate()
+        
     })
 });
