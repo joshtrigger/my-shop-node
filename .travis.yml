@@ -4,7 +4,7 @@ node_js:
 install:
   - npm install
 script:
-  - nyc npm test && nyc report --reporter=text-lcov | coveralls
+  - nyc npm run test-cov && nyc report --reporter=text-lcov | coveralls
 notifications:
   email:
     - false
